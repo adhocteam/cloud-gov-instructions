@@ -9,7 +9,7 @@ This repository provides a comprehensive set of instruction files that help AI c
 ### What's Included
 
 | File | Purpose |
-|------|---------|
+|:------|:---------|
 | `.github/copilot-instructions.md` | Repository-level cloud.gov platform overview |
 | `AGENTS.md` | AI agent behaviors and safety guardrails |
 | `.github/instructions/` | Task-specific instruction files |
@@ -53,7 +53,7 @@ GitHub Copilot will automatically use these instructions when:
 ### Core Instructions
 
 | File | Applies To | Description |
-|------|-----------|-------------|
+|:------|:-----------|:-------------|
 | [deployment.instructions.md](.github/instructions/deployment.instructions.md) | `manifest*.yml`, `Procfile`, `.cfignore`, `.profile` | Deployment workflows, blue-green deployments, scaling |
 | [manifest.instructions.md](.github/instructions/manifest.instructions.md) | `manifest*.yml`, `vars*.yml` | Manifest configuration, properties reference |
 | [services.instructions.md](.github/instructions/services.instructions.md) | `*.py`, `*.js`, `*.ts`, `*.rb`, `*.java`, `*.go`, `manifest*.yml` | RDS, S3, Redis service integration |
@@ -61,7 +61,7 @@ GitHub Copilot will automatically use these instructions when:
 ### DevOps & Security
 
 | File | Applies To | Description |
-|------|-----------|-------------|
+|:------|:-----------|:-------------|
 | [cicd.instructions.md](.github/instructions/cicd.instructions.md) | `.github/workflows/*.yml`, `Jenkinsfile`, `.circleci/config.yml` | CI/CD pipelines, service accounts |
 | [security.instructions.md](.github/instructions/security.instructions.md) | `*.py`, `*.js`, `*.ts`, `*.rb`, `*.java`, `*.go`, `manifest*.yml` | FedRAMP compliance, secrets management, NIST controls |
 | [logging.instructions.md](.github/instructions/logging.instructions.md) | `*.py`, `*.js`, `*.ts`, `*.rb`, `*.java`, `*.go`, `manifest*.yml` | Structured logging, log drains |
@@ -69,7 +69,7 @@ GitHub Copilot will automatically use these instructions when:
 ### Custom Agents
 
 | Agent | Purpose |
-|-------|---------|
+|:-------|:---------|
 | [compliance-docs.agent.md](.github/agents/compliance-docs.agent.md) | Generate SSP sections and Control Implementation Matrices |
 
 #### Invoking Custom Agents in VS Code
@@ -208,6 +208,8 @@ Contributions are welcome! Please:
 
 ## License
 
-This project is in the public domain within the United States, and copyright and related rights in the work worldwide are waived through the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/).
+This project is licensed under the [MIT License](LICENSE).
 
-All contributions to this project will be released under the CC0 dedication. By submitting a pull request, you are agreeing to comply with this waiver of copyright interest.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Use at your own risk.
