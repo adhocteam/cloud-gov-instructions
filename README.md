@@ -14,6 +14,7 @@ This repository provides a comprehensive set of instruction files that help AI c
 | `AGENTS.md` | AI agent behaviors and safety guardrails |
 | `.github/instructions/` | Task-specific instruction files |
 | `.github/agents/` | Custom Copilot agents for specialized tasks |
+| `.github/skills/` | Reusable skills for domain expertise |
 
 ## Quick Start
 
@@ -29,6 +30,7 @@ git clone https://github.com/your-org/cloud-gov-instructions.git
 cp -r cloud-gov-instructions/.github/copilot-instructions.md your-project/.github/
 cp -r cloud-gov-instructions/.github/instructions your-project/.github/
 cp -r cloud-gov-instructions/.github/agents your-project/.github/
+cp -r cloud-gov-instructions/.github/skills your-project/.github/
 cp cloud-gov-instructions/AGENTS.md your-project/
 ```
 
@@ -94,6 +96,16 @@ Or use specific prompts like:
 @compliance-docs Document which controls are inherited from cloud.gov vs implemented by our application
 ```
 
+### Skills
+
+Skills provide domain expertise that Copilot can draw upon regardless of file type:
+
+| Skill | Purpose |
+|:------|:--------|
+| [cf-troubleshoot.md](.github/skills/cf-troubleshoot.md) | Diagnose and resolve common cloud.gov/CF issues |
+
+Skills are automatically available to Copilot and provide expert guidance for troubleshooting, debugging, and operational tasks.
+
 ## Key Features
 
 ### AI Safety Guardrails
@@ -139,8 +151,10 @@ your-project/
 │   │   ├── cicd.instructions.md
 │   │   ├── security.instructions.md
 │   │   └── logging.instructions.md
-│   └── agents/
-│       └── compliance-docs.agent.md
+│   ├── agents/
+│   │   └── compliance-docs.agent.md
+│   └── skills/
+│       └── cf-troubleshoot.md
 ├── AGENTS.md                       # Agent behaviors and safety rules
 ├── manifest.yml                    # Your app's deployment config
 └── ... (your application code)
