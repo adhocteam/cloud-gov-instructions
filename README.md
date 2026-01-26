@@ -24,7 +24,7 @@ Copy the following files to your cloud.gov project:
 
 ```bash
 # Clone this repository
-git clone https://github.com/your-org/cloud-gov-instructions.git
+git clone https://github.com/adhocteam/cloud-gov-instructions.git
 
 # Copy instruction files to your project
 cp -r cloud-gov-instructions/.github/copilot-instructions.md your-project/.github/

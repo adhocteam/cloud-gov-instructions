@@ -69,26 +69,29 @@ The `.github/instructions/` directory will contain specialized instruction files
 - [x] Service keys and credentials
 - [x] Database services (PostgreSQL, MySQL)
 - [x] S3 storage
-- [ ] Elasticsearch/OpenSearch
 - [x] Redis
+
+> **Note:** Elasticsearch/OpenSearch coverage is out of scope for the initial release. Contributions welcome.
 
 #### Networking
 - [x] Custom domains
 - [x] Route management
-- [ ] CDN integration
-- [ ] Internal routes
+
+> **Note:** CDN integration and internal routes are out of scope for the initial release. Contributions welcome.
 
 #### Security & Compliance
 - [x] FedRAMP compliance considerations
-- [ ] Container scanning
 - [x] Egress restrictions
 - [x] Secrets management
+
+> **Note:** Container scanning guidance is out of scope for the initial release. Contributions welcome.
 
 #### Operations
 - [x] Logging with `cf logs`
 - [x] Application scaling
 - [x] Health monitoring
-- [ ] Incident response
+
+> **Note:** Incident response procedures are out of scope for the initial release. Contributions welcome.
 
 #### CI/CD Integration
 - [x] GitHub Actions workflows
