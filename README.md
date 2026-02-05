@@ -1,5 +1,9 @@
 # Cloud.gov Copilot Instructions
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/adhocteam/cloud-gov-instructions)](https://github.com/adhocteam/cloud-gov-instructions/releases)
+[![GitHub issues](https://img.shields.io/github/issues/adhocteam/cloud-gov-instructions)](https://github.com/adhocteam/cloud-gov-instructions/issues)
+
 A reusable set of instruction files for AI coding assistants (GitHub Copilot) that encapsulate cloud.gov platform guidance and best practices.
 
 ## Overview
@@ -20,7 +24,24 @@ This repository provides a comprehensive set of instruction files that help AI c
 
 ### 1. Copy Files to Your Repository
 
-Copy the following files to your cloud.gov project:
+Choose one of these methods to get the instruction files:
+
+**Option A: Download from Release (Recommended)**
+
+```bash
+# Download and extract the latest release
+curl -L https://github.com/adhocteam/cloud-gov-instructions/archive/refs/tags/v1.1.0.tar.gz | tar xz
+
+# Copy instruction files to your project
+cd cloud-gov-instructions-1.1.0
+cp -r .github/copilot-instructions.md your-project/.github/
+cp -r .github/instructions your-project/.github/
+cp -r .github/agents your-project/.github/
+cp -r .github/skills your-project/.github/
+cp AGENTS.md your-project/
+```
+
+**Option B: Clone Repository**
 
 ```bash
 # Clone this repository
@@ -33,6 +54,8 @@ cp -r cloud-gov-instructions/.github/agents your-project/.github/
 cp -r cloud-gov-instructions/.github/skills your-project/.github/
 cp cloud-gov-instructions/AGENTS.md your-project/
 ```
+
+> **Tip:** Browse all releases at https://github.com/adhocteam/cloud-gov-instructions/releases
 
 ### 2. Customize for Your Project
 

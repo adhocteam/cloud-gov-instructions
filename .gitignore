@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# Editor backups
+*~
+\#*\#
+.\#*
+
+# OS generated files
+Thumbs.db
+Desktop.ini
