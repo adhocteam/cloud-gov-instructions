@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloud.gov Copilot Instructions</title>
+  <style>
+    :root {
+      --blue-dark: #1a3a5c;
+      --blue-mid: #2e6da4;
+      --blue-light: #e8f0fe;
+      --gray-50: #f8f9fa;
+      --gray-100: #eef0f2;
+      --gray-600: #555;
+      --gray-800: #1d2d35;
+      --white: #fff;
+      --radius: 8px;
+      --max-width: 960px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--gray-800);
+      line-height: 1.6;
+      background: var(--white);
+    }
+
+    /* ---- Hero ---- */
+    .hero {
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue-mid));
+      color: var(--white);
+      text-align: center;
+      padding: 5rem 1.5rem 4rem;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      max-width: 640px;
+      margin: 0 auto 2rem;
+      opacity: 0.9;
+    }
+    .hero .badges {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .hero .badges img { height: 22px; }
+    .btn {
+      display: inline-block;
+      padding: 0.7rem 1.6rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary {
+      background: var(--white);
+      color: var(--blue-dark);
+    }
+    .btn-outline {
+      border: 2px solid var(--white);
+      color: var(--white);
+      margin-left: 0.75rem;
+    }
+
+    /* ---- Sections ---- */
+    section {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem;
+    }
+    section h2 {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      color: var(--blue-dark);
+    }
+    section p {
+      color: var(--gray-600);
+      max-width: 720px;
+    }
+
+    /* ---- Card Grid ---- */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    .card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-100);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.4rem;
+      color: var(--gray-800);
+    }
+    .card p {
+      font-size: 0.9rem;
+      color: var(--gray-600);
+    }
+    .card code {
+      font-size: 0.82rem;
+      background: var(--blue-light);
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      color: var(--blue-dark);
+    }
+
+    /* ---- Quick Start ---- */
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      margin-top: 1.5rem;
+      padding: 0;
+    }
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding-left: 3rem;
+      margin-bottom: 1.75rem;
+    }
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: var(--blue-mid);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .steps li strong { display: block; margin-bottom: 0.25rem; }
+    .steps li p { margin: 0; font-size: 0.92rem; }
+
+    pre {
+      background: var(--gray-800);
+      color: #d4dbe2;
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius);
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin-top: 0.75rem;
+    }
+
+    /* ---- Feature list ---- */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .feature {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .feature-icon {
+      flex-shrink: 0;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius);
+      background: var(--blue-light);
+      color: var(--blue-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+    .feature h3 { font-size: 1rem; margin-bottom: 0.2rem; }
+    .feature p  { font-size: 0.88rem; color: var(--gray-600); }
+
+    /* ---- Divider ---- */
+    .divider {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      border: none;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    /* ---- Footer ---- */
+    footer {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      font-size: 0.85rem;
+      color: var(--gray-600);
+    }
+    footer a { color: var(--blue-mid); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.75rem; }
+      .hero p  { font-size: 1rem; }
+      .btn-outline { margin-left: 0; margin-top: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <header class="hero">
+    <h1>Cloud.gov Copilot Instructions</h1>
+    <p>Reusable instruction files for AI coding assistants that encapsulate cloud.gov platform guidance, security best practices, and FedRAMP compliance patterns.</p>
+    <nav>
+      <a class="btn btn-primary" href="https://github.com/adhocteam/cloud-gov-instructions">GitHub Repository</a>
+      <a class="btn btn-outline" href="https://github.com/adhocteam/cloud-gov-instructions/releases">Download Latest</a>
+    </nav>
+  </header>
+
+  <!-- What's Included -->
+  <section>
+    <h2>What's Included</h2>
+    <p>Drop these files into any project deployed to cloud.gov and your AI assistant instantly understands the platform.</p>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Instruction Files</h3>
+        <p>Six task-specific guides covering deployment, manifests, services, CI/CD, security, and logging — each scoped to relevant file types.</p>
+      </div>
+      <div class="card">
+        <h3>Agent Behaviors</h3>
+        <p>Safety guardrails in <code>AGENTS.md</code> prevent destructive CF commands from running without explicit confirmation.</p>
+      </div>
+      <div class="card">
+        <h3>Custom Agents</h3>
+        <p>A compliance-docs agent that generates Control Implementation Matrices and System Security Plan sections.</p>
+      </div>
+      <div class="card">
+        <h3>Skills</h3>
+        <p>A <code>cf-troubleshoot</code> skill for diagnosing common cloud.gov and Cloud Foundry issues directly in Copilot Chat.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Key Features -->
+  <section>
+    <h2>Key Features</h2>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">&#x1F6E1;</div>
+        <div>
+          <h3>AI Safety Guardrails</h3>
+          <p>Destructive commands like <code>cf delete</code> always require confirmation. Production environments get extra warnings.</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#x1F4CB;</div>
+        <div>
+          <h3>NIST Control References</h3>
+          <p>Security-relevant generated code automatically includes NIST SP 800-53 control IDs in comments and docstrings.</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#x2601;</div>
+        <div>
+          <h3>Cloud.gov Native</h3>
+          <p>Built specifically for cloud.gov's FedRAMP Moderate environment — covers services, buildpacks, and egress rules.</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#x1F527;</div>
+        <div>
+          <h3>Fully Customizable</h3>
+          <p>Add project-specific instructions, extend agent behaviors, or create new skills tailored to your team.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Quick Start -->
+  <section>
+    <h2>Quick Start</h2>
+    <ol class="steps">
+      <li>
+        <strong>Copy files into your project</strong>
+        <p>Download the latest release and copy the instruction files:</p>
+        <pre>curl -L https://github.com/adhocteam/cloud-gov-instructions/archive/refs/tags/v1.1.0.tar.gz | tar xz
+cp -r cloud-gov-instructions-1.1.0/.github/copilot-instructions.md your-project/.github/
+cp -r cloud-gov-instructions-1.1.0/.github/instructions your-project/.github/
+cp -r cloud-gov-instructions-1.1.0/.github/agents your-project/.github/
+cp cloud-gov-instructions-1.1.0/AGENTS.md your-project/</pre>
+      </li>
+      <li>
+        <strong>Customize for your project</strong>
+        <p>Update <code>copilot-instructions.md</code> with project-specific context and adjust agent behaviors in <code>AGENTS.md</code> to fit your team's workflow.</p>
+      </li>
+      <li>
+        <strong>Start developing</strong>
+        <p>GitHub Copilot will automatically use these instructions when editing files that match the configured patterns — manifests, workflows, application code, and more.</p>
+      </li>
+    </ol>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Instruction Files -->
+  <section>
+    <h2>Instruction Files</h2>
+    <p>Each file is scoped to specific file patterns so guidance activates only where it's relevant.</p>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Deployment</h3>
+        <p>Blue-green deployments, scaling strategies, health checks, and rollback patterns.</p>
+        <p><code>manifest*.yml</code> <code>Procfile</code> <code>.cfignore</code></p>
+      </div>
+      <div class="card">
+        <h3>Manifest</h3>
+        <p>Complete manifest property reference, multi-environment setups, and variable interpolation.</p>
+        <p><code>manifest*.yml</code> <code>vars*.yml</code></p>
+      </div>
+      <div class="card">
+        <h3>Services</h3>
+        <p>RDS, S3, Redis, and Elasticsearch integration with VCAP_SERVICES credential parsing.</p>
+        <p><code>*.py</code> <code>*.js</code> <code>*.go</code> <code>*.java</code></p>
+      </div>
+      <div class="card">
+        <h3>CI/CD</h3>
+        <p>GitHub Actions workflows, service account auth, and automated deployment pipelines.</p>
+        <p><code>.github/workflows/*.yml</code></p>
+      </div>
+      <div class="card">
+        <h3>Security</h3>
+        <p>FedRAMP compliance, secrets management, NIST control mapping, and ATO support.</p>
+        <p><code>*.py</code> <code>*.js</code> <code>*.go</code> <code>manifest*.yml</code></p>
+      </div>
+      <div class="card">
+        <h3>Logging</h3>
+        <p>Structured JSON logging to stdout, log drain configuration, and audit trail patterns.</p>
+        <p><code>*.py</code> <code>*.js</code> <code>*.go</code> <code>manifest*.yml</code></p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Resources -->
+  <section>
+    <h2>Resources</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>cloud.gov Docs</h3>
+        <p><a href="https://docs.cloud.gov/">docs.cloud.gov</a> — Official platform documentation.</p>
+      </div>
+      <div class="card">
+        <h3>Cloud Foundry Docs</h3>
+        <p><a href="https://docs.cloudfoundry.org/">docs.cloudfoundry.org</a> — Upstream CF documentation.</p>
+      </div>
+      <div class="card">
+        <h3>NIST SP 800-53</h3>
+        <p><a href="https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final">Rev 5</a> — Security and privacy controls reference.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      <a href="https://github.com/adhocteam/cloud-gov-instructions">GitHub</a> &middot;
+      <a href="https://github.com/adhocteam/cloud-gov-instructions/releases">Releases</a> &middot;
+      <a href="https://github.com/adhocteam/cloud-gov-instructions/blob/main/CONTRIBUTING.md">Contributing</a> &middot;
+      <a href="https://github.com/adhocteam/cloud-gov-instructions/blob/main/LICENSE">MIT License</a>
+    </p>
+    <p style="margin-top: 0.5rem;">Get in touch with experts at <a href="https://adhoc.team/">Ad Hoc</a> for <a href="mailto:hello@adhoc.team">support or assistance</a></p>.
+  </footer>
+
+</body>
+</html>
