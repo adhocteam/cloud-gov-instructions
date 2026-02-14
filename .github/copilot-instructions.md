@@ -195,3 +195,4 @@ When working with cloud.gov deployments, expect these files:
 - [cloud.gov Dashboard](https://dashboard.fr.cloud.gov/)
 - [cloud.gov Status](https://cloudgov.statuspage.io/)
 - [Cloud Foundry Documentation](https://docs.cloudfoundry.org/)
+- [Cloud Foundry CLI Documentation](https://cli.cloudfoundry.org/en-US/v8/) (use only v8, not v7 or v6)
