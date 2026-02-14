@@ -30,14 +30,17 @@ Cloud.gov is built on Cloud Foundry and provides:
 ### Authentication
 
 ```bash
-# Login with SSO (recommended for interactive use)
-cf login -a api.fr.cloud.gov --sso
+# Target the cloud.gov API endpoint
+cf api api.fr.cloud.gov
 
 # Login with service account credentials (for CI/CD)
-cf login -a api.fr.cloud.gov -u <USERNAME> -p <PASSWORD>
+cf auth <USERNAME> <PASSWORD>
 
 # Target an org and space
 cf target -o <ORG> -s <SPACE>
+
+# Login with SSO (recommended for interactive use)
+cf login -a api.fr.cloud.gov --sso
 ```
 
 ### Deployment
