@@ -291,11 +291,9 @@ jobs:
       - run:
           name: Deploy to Cloud.gov
           command: |
-            cf login -a https://api.fr.cloud.gov \
-              -u $CF_USERNAME \
-              -p $CF_PASSWORD \
-              -o $CF_ORG \
-              -s $CF_SPACE
+            cf api https://api.fr.cloud.gov
+            cf auth
+            cf target -o $CF_ORG -s $CF_SPACE
             cf push
 
 workflows:
