@@ -30,10 +30,10 @@ Choose one of these methods to get the instruction files:
 
 ```bash
 # Download and extract the latest release
-curl -L https://github.com/adhocteam/cloud-gov-instructions/archive/refs/tags/v1.1.0.tar.gz | tar xz
+curl -L https://github.com/adhocteam/cloud-gov-instructions/archive/refs/tags/v1.2.0.tar.gz | tar xz
 
 # Copy instruction files to your project
-cd cloud-gov-instructions-1.1.0
+cd cloud-gov-instructions-1.2.0
 cp -r .github/copilot-instructions.md your-project/.github/
 cp -r .github/instructions your-project/.github/
 cp -r .github/agents your-project/.github/
