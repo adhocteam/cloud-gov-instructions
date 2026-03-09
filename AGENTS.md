@@ -38,6 +38,25 @@ When assisting with cloud.gov projects, you can help with:
 
 ## Agent Behaviors
 
+### Autonomy Tiers
+
+Agents operate at defined autonomy tiers that determine what actions they can take. Start at the lowest tier appropriate for the task and only escalate when necessary.
+
+| Tier | Mode | What the Agent Does | Examples |
+|------|------|---------------------|----------|
+| **0: OBSERVE** | Read-only | Run read-only CF commands, analyze logs, review configurations | `cf apps`, `cf logs --recent`, `cf env` |
+| **1: RECOMMEND** | Suggest only | Analyze and suggest changes without modifying anything | "You should add `instances: 2` to your manifest" |
+| **2: DRAFT** | Edit files | Create or modify local files (manifests, CI workflows, code) | Edit `manifest.yml`, create `.github/workflows/deploy.yml` |
+| **3: DEPLOY (non-prod)** | Execute in dev/staging | Run modifying CF commands in non-production spaces after confirmation | `cf push` in dev or staging spaces |
+| **4: DEPLOY (prod, gated)** | Execute in production | Run modifying CF commands in production — requires explicit confirmation and impact statement | `cf push --strategy rolling` in production |
+
+**Tier Selection Rules:**
+- **Default to the lowest tier** that accomplishes the task
+- **Read-only questions** (app status, log analysis) → Tier 0
+- **Code generation** (new manifests, CI pipelines) → Tier 2
+- **Deployments** → Tier 3 (non-prod) or Tier 4 (prod), always with confirmation
+- **Never skip tiers** — if the task requires Tier 4, verbally confirm the environment and impact before proceeding
+
 ### Critical Safety Rules
 
 **ALWAYS ask for explicit user confirmation before running any CF CLI command that modifies or destroys resources.** These commands can cause service outages, data loss, or unintended costs.
@@ -88,6 +107,45 @@ Before running any modifying command:
 
 Example confirmation request:
 > "This will delete the application `my-app` in the **production** space (`org-name/prod`). This action is irreversible and will cause immediate downtime. Do you want me to proceed?"
+
+### Error Prevention Hierarchy
+
+When designing safety measures, prefer structural prevention over warnings. Apply this hierarchy from most effective to least:
+
+| Level | Approach | Cloud.gov Example |
+|-------|----------|-------------------|
+| **1. Make Impossible** | Structural prevention — the system won't allow it | Agent cannot execute `cf delete-service` without parsing an explicit confirmation response |
+| **2. Make Hard** | Extra steps + approval required | Production deploys require stating org, space, and app name explicitly before proceeding |
+| **3. Make Visible** | Warnings + confirmations shown | Warning banner displayed when space name contains `prod`, `production`, or `prd` |
+| **4. Make Reversible** | Easy rollback + audit trail | Blue-green deployments allow instant rollback via route swap; all actions logged |
+
+Always prefer a higher level when possible. Don't rely on warnings (level 3) when you can make the mistake structurally impossible (level 1).
+
+### Action Audit Trail
+
+When performing CF operations or making recommendations, maintain an audit trail of significant actions taken during the session. This supports FedRAMP AU-family controls.
+
+**NIST 800-53: AU-2 — Audit Events | AU-3 — Content of Audit Records**
+
+At the end of any session that involves CF commands or file modifications, summarize:
+
+1. **Commands executed** — Every `cf` command run, with org/space context
+2. **Files modified** — Every file created or changed, with a brief description
+3. **Recommendations made** — Suggestions given but not yet acted upon
+4. **Risks identified** — Any warnings or concerns raised during the session
+
+Example summary format:
+
+```
+## Session Actions
+- [EXECUTED] cf push my-app -f manifest-dev.yml (org: my-org, space: dev)
+- [MODIFIED] manifest-dev.yml — added instances: 2 for availability
+- [MODIFIED] .github/workflows/deploy.yml — added health check verification step
+- [RECOMMENDED] Rotate service account credentials (last rotated 85 days ago)
+- [WARNING] Production space detected — confirmed with user before proceeding
+```
+
+This trail should be available for compliance review and incident analysis.
 
 ### When Generating Security-Relevant Code
 
