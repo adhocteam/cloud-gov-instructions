@@ -225,6 +225,74 @@ applications:
       LOG_LEVEL: INFO  # or DEBUG, WARNING, ERROR
 ```
 
+## Correlation IDs for Distributed Tracing
+
+Cloud.gov sets an `X-Vcap-Request-Id` header on every request. Capture and propagate this ID across your services to enable end-to-end tracing through log analysis.
+
+**NIST 800-53: AU-3 — Content of Audit Records | AU-12 — Audit Record Generation**
+
+### Python Flask
+
+```python
+import uuid
+from flask import Flask, request, g
+
+app = Flask(__name__)
+
+@app.before_request
+def set_correlation_id():
+    # cloud.gov/CF sets X-Vcap-Request-Id automatically
+    g.correlation_id = request.headers.get(
+        'X-Vcap-Request-Id',
+        request.headers.get('X-Request-ID', str(uuid.uuid4()))
+    )
+
+@app.after_request
+def add_correlation_header(response):
+    response.headers['X-Correlation-Id'] = g.correlation_id
+    return response
+```
+
+Include the correlation ID in every log entry:
+
+```python
+@app.after_request
+def log_request_with_correlation(response):
+    logger.info("request", extra={
+        "correlation_id": g.correlation_id,
+        "method": request.method,
+        "path": request.path,
+        "status": response.status_code
+    })
+    return response
+```
+
+### Node.js Express
+
+```javascript
+app.use((req, res, next) => {
+  // cloud.gov/CF sets x-vcap-request-id automatically
+  req.correlationId = req.headers['x-vcap-request-id']
+    || req.headers['x-request-id']
+    || uuid.v4();
+  res.setHeader('X-Correlation-Id', req.correlationId);
+  next();
+});
+```
+
+When calling downstream services, propagate the correlation ID:
+
+```python
+import requests
+
+def call_downstream_service(url, correlation_id):
+    return requests.get(url, headers={
+        'X-Correlation-Id': correlation_id
+    })
+```
+
+This enables tracing a single user request across multiple services in your log drain.
+
 ## Request Logging
 
 ### Python Flask
@@ -385,6 +453,54 @@ logger.info("user_login", extra={"user_id": user.id})
 logger.info("api_call", extra={"endpoint": "/users", "status": 200})
 logger.info("record_processed", extra={"record_type": "user_data"})
 ```
+
+### Automatic Log Redaction
+
+In addition to field-level masking, apply regex-based redaction to catch credentials that may appear in unexpected log output. This is especially important for cloud.gov apps that handle VCAP_SERVICES credentials, CF tokens, and AWS keys from S3/RDS bindings.
+
+**NIST 800-53: AU-9 — Protection of Audit Information | SI-4 — System Monitoring**
+
+#### Python
+
+```python
+import re
+
+# Patterns that match common credential formats in cloud.gov environments
+REDACTION_PATTERNS = [
+    (re.compile(r'(?:password|secret|token|key)["\s:=]+["\']?([a-zA-Z0-9+/=_-]{20,})["\']?', re.IGNORECASE), '[REDACTED]'),
+    (re.compile(r'AKIA[0-9A-Z]{16}'), '[AWS-KEY-REDACTED]'),                              # AWS Access Key ID
+    (re.compile(r'(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{36}'), '[GITHUB-TOKEN-REDACTED]'), # GitHub tokens
+    (re.compile(r'eyJ[A-Za-z0-9-_]+\.eyJ[A-Za-z0-9-_]+'), '[JWT-REDACTED]'),              # JWT tokens
+    (re.compile(r'cf\s+auth\s+\S+\s+\S+'), 'cf auth [REDACTED] [REDACTED]'),           # CF auth commands
+]
+
+def redact_sensitive(text: str) -> str:
+    """Apply pattern-based redaction to log output."""
+    for pattern, replacement in REDACTION_PATTERNS:
+        text = pattern.sub(replacement, text)
+    return text
+```
+
+#### Node.js
+
+```javascript
+const REDACTION_PATTERNS = [
+  [/(?:password|secret|token|key)["\s:=]+["']?([a-zA-Z0-9+\/=_-]{20,})["']?/gi, '[REDACTED]'],
+  [/AKIA[0-9A-Z]{16}/g, '[AWS-KEY-REDACTED]'],
+  [/(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{36}/g, '[GITHUB-TOKEN-REDACTED]'],
+  [/eyJ[A-Za-z0-9\-_]+\.eyJ[A-Za-z0-9\-_]+/g, '[JWT-REDACTED]'],
+];
+
+function redactSensitive(text) {
+  let redacted = text;
+  for (const [pattern, replacement] of REDACTION_PATTERNS) {
+    redacted = redacted.replace(pattern, replacement);
+  }
+  return redacted;
+}
+```
+
+Apply redaction as a logging filter so it runs automatically on all output, not just fields you explicitly mask.
 
 ### Mask Sensitive Fields
 

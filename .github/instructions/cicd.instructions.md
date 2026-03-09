@@ -69,6 +69,100 @@ cf create-service-key my-deployer deploy-key
 cf service-key my-deployer deploy-key
 ```
 
+## Pre-Deployment Validation Chain
+
+Run a deterministic validation chain before every deployment. Each step should exit non-zero on failure, blocking subsequent stages. This catches issues early and reduces the risk of deploying broken or insecure code.
+
+**NIST 800-53: SA-10 — Developer Configuration Management | CM-3 — Configuration Change Control**
+
+```yaml
+name: Validate and Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate manifest
+        run: |
+          # Ensure manifest is valid YAML and check structure
+          python -c "import yaml; yaml.safe_load(open('manifest.yml'))"
+
+      - name: Audit dependencies
+        run: |
+          # Python
+          pip install safety
+          safety check -r requirements.txt
+          # Or Node.js: npm audit --audit-level=high
+
+      - name: Secret detection
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --only-verified
+
+      - name: SAST scan
+        uses: github/codeql-action/analyze@v2
+        with:
+          languages: python
+
+      - name: Run tests
+        run: pytest
+
+  deploy-dev:
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Dev
+        uses: cloud-gov/cg-cli-tools@main
+        with:
+          cf_api: https://api.fr.cloud.gov
+          cf_username: ${{ secrets.CG_USERNAME_DEV }}
+          cf_password: ${{ secrets.CG_PASSWORD_DEV }}
+          cf_org: your-org
+          cf_space: dev
+
+      - name: Push application
+        run: cf push -f manifest-dev.yml
+
+      - name: Verify deployment
+        run: |
+          sleep 10
+          curl -sf https://my-app-dev.app.cloud.gov/health || exit 1
+```
+
+The validation chain in order:
+
+| Step | What It Catches | Blocks Deploy? |
+|------|----------------|-----------|
+| **Manifest validation** | YAML syntax errors, missing required fields | Yes |
+| **Dependency audit** | Known vulnerabilities in packages | Yes |
+| **Secret detection** | Credentials accidentally committed | Yes |
+| **SAST scan** | Code-level security vulnerabilities | Yes |
+| **Unit tests** | Logic errors, regressions | Yes |
+| **Health check** | App not starting, misconfiguration | Yes (rollback) |
+
+## Deployment Notification Severity
+
+Configure CI/CD notifications to match the severity of the event. Not every deployment event needs the same level of attention.
+
+| Event | Severity | Suggested Action |
+|-------|----------|------------------|
+| Deploy to dev succeeded | Info | CI log only |
+| Deploy to staging succeeded | Info | Slack channel |
+| Deploy to prod succeeded | Action | Slack + team mention |
+| Deploy failed (any environment) | Urgent | Slack + on-call notification |
+| Health check failing post-deploy | Urgent | Auto-rollback + on-call notification |
+| Security scan found vulnerabilities | Warning | Block deploy + notify team |
+| Service account credentials expiring | Warning | Notify team 14 days before |
+
 ## GitHub Actions
 
 ### Setup
