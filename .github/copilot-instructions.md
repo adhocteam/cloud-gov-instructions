@@ -33,8 +33,13 @@ Cloud.gov is built on Cloud Foundry and provides:
 # Target the cloud.gov API endpoint
 cf api api.fr.cloud.gov
 
-# Login with service account credentials (for CI/CD)
-cf auth <USERNAME> <PASSWORD>
+# Login with service account credentials (for CI/CD and agent-driven workflows)
+# Store credentials in a .env file to avoid exposing them in shell history:
+#   CF_USERNAME=<SERVICE_ACCOUNT_USERNAME>
+#   CF_PASSWORD=<SERVICE_ACCOUNT_PASSWORD>
+# Then source the file and authenticate:
+source .env
+cf auth
 
 # Target an org and space
 cf target -o <ORG> -s <SPACE>
@@ -42,6 +47,11 @@ cf target -o <ORG> -s <SPACE>
 # Login with SSO (recommended for interactive use)
 cf login -a api.fr.cloud.gov --sso
 ```
+
+> **Security note**: Never pass credentials as positional arguments to `cf auth` — they
+> will appear in shell history and process listings. Use the `CF_USERNAME` and
+> `CF_PASSWORD` environment variables instead. Store them in a `.env` file (excluded
+> from version control via `.gitignore`) and load with `source .env`.
 
 ### Deployment
 
